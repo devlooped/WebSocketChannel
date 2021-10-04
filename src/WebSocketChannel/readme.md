@@ -72,6 +72,33 @@ app.Use(async (context, next) =>
 ```
 
 
+# Installation
+
+This project can be used either as a regular nuget package:
+
+```
+<PackageReference Include="WebSocketChannel" Version="*" />
+```
+
+Or alternatively, referenced directly as a source-only dependency using [dotnet-file](https://www.nuget.org/packages/dotnet-file):
+
+```
+> dotnet file add https://github.com/devlooped/WebSocketChannel/blob/main/src/WebSocketChannel/WebSocketChannel.cs
+> dotnet file add https://github.com/devlooped/WebSocketChannel/blob/main/src/WebSocketChannel/WebSocketExtensions.cs
+```
+
+It's also possible to specify a desired target location for the referenced source files, such as:
+
+```
+> dotnet file add https://github.com/devlooped/WebSocketChannel/blob/main/src/WebSocketChannel/WebSocketChannel.cs src/MyProject/External/.
+> dotnet file add https://github.com/devlooped/WebSocketChannel/blob/main/src/WebSocketChannel/WebSocketExtensions.cs src/MyProject/External/.
+```
+
+When referenced as loose source files, it's easy to also get automated PRs when the upstream files change, 
+as in the [dotnet-file.yml](https://github.com/devlooped/dotnet-file/blob/main/.github/workflows/dotnet-file.yml) workflow that 
+keeps the repository up to date with a template. See also [dotnet-config](https://dotnetconfig.org), which is used to 
+for the `dotnet-file` configuration settings that tracks all this.
+
 
 
 ## Sponsors

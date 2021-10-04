@@ -10,7 +10,7 @@ namespace Devlooped.Net;
 /// Due to the nature of the underlying <see cref="WebSocket"/>, no concurrent writing 
 /// or reading is allowed, so the returned channel is effectively thread-safe by design. 
 /// </remarks>
-public static class WebSocketChannel
+static partial class WebSocketChannel
 {
     /// <summary>
     /// Creates a channel over the given <paramref name="webSocket"/> for reading/writing 

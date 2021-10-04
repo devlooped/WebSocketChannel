@@ -9,7 +9,7 @@ namespace System.Net.WebSockets;
 /// API.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public static class WebSocketExtensions
+static partial class WebSocketExtensions
 {
     /// <summary>
     /// Creates a channel over the given <paramref name="webSocket"/> for reading/writing 
