@@ -52,7 +52,11 @@ app.Use(async (context, next) =>
             }
             catch (OperationCanceledException)
             {
-                await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, default);
+                try
+                {
+                    await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, default);
+                }
+                catch { } // Best effort to try closing cleanly. Client may be entirely gone.
             }
         }
         else
@@ -66,6 +70,7 @@ app.Use(async (context, next) =>
     }
 });
 ```
+
 
 
 
