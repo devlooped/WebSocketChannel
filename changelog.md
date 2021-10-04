@@ -1,8 +1,8 @@
 
 
-## [v0.5.0-alpha](https://github.com/devlooped/WebSocketChannel/tree/v0.5.0-alpha) (2021-10-04)
+## [v0.5.0-beta](https://github.com/devlooped/WebSocketChannel/tree/v0.5.0-beta) (2021-10-04)
 
-[Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/cb8103a2f18547e9697c0902c679e7578f0c8c65...v0.5.0-alpha)
+[Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/cb8103a2f18547e9697c0902c679e7578f0c8c65...v0.5.0-beta)
 
 
 
