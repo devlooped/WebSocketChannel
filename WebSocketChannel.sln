@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSocketChannel", "src\Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "src\Tests\Tests.csproj", "{517F1129-4EA6-46FA-827B-42CF5EB0DE09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "src\Benchmark\Benchmark.csproj", "{694ED796-BC51-4B41-85B0-961E79A424DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{517F1129-4EA6-46FA-827B-42CF5EB0DE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517F1129-4EA6-46FA-827B-42CF5EB0DE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517F1129-4EA6-46FA-827B-42CF5EB0DE09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{694ED796-BC51-4B41-85B0-961E79A424DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{694ED796-BC51-4B41-85B0-961E79A424DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{694ED796-BC51-4B41-85B0-961E79A424DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{694ED796-BC51-4B41-85B0-961E79A424DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

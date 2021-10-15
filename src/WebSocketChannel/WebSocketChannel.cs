@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Devlooped.Net;
 
@@ -17,28 +18,40 @@ static partial class WebSocketChannel
     /// purposes.
     /// </summary>
     /// <param name="webSocket">The <see cref="WebSocket"/> to create the channel over.</param>
+    /// <param name="displayName">Optional friendly name to identify this channel while debugging or troubleshooting.</param>
     /// <returns>A channel to read/write the given <paramref name="webSocket"/>.</returns>
-    public static Channel<ReadOnlyMemory<byte>> Create(WebSocket webSocket)
-        => new DefaultWebSocketChannel(webSocket);
+    public static Channel<ReadOnlyMemory<byte>> Create(WebSocket webSocket, string? displayName = default)
+        => new DefaultWebSocketChannel(webSocket, displayName);
 
     class DefaultWebSocketChannel : Channel<ReadOnlyMemory<byte>>
     {
-        static readonly Exception defaultDoneWritting = new Exception(nameof(defaultDoneWritting));
+#if DEBUG
+        static readonly TimeSpan closeTimeout = TimeSpan.FromMilliseconds(
+            Debugger.IsAttached ? int.MaxValue : 250);
+#else
+        static readonly TimeSpan closeTimeout = TimeSpan.FromMilliseconds(250);
+#endif
+        static readonly Exception defaultDoneWritting = new(nameof(defaultDoneWritting));
         static readonly Exception socketClosed = new WebSocketException(WebSocketError.ConnectionClosedPrematurely, "WebSocket was closed by the remote party.");
 
-        static readonly TimeSpan closeTimeout = TimeSpan.FromMilliseconds(250);
+        readonly CancellationTokenSource completionCancellation = new();
         readonly TaskCompletionSource<bool> completion = new();
         readonly object syncObj = new();
         Exception? done;
 
         WebSocket webSocket;
 
-        public DefaultWebSocketChannel(WebSocket webSocket)
+        public DefaultWebSocketChannel(WebSocket webSocket, string? displayName = default)
         {
             this.webSocket = webSocket;
+            DisplayName = displayName;
             Reader = new WebSocketChannelReader(this);
             Writer = new WebSocketChannelWriter(this);
         }
+
+        public string? DisplayName { get; }
+
+        public override string ToString() => DisplayName ?? base.ToString();
 
         void Complete()
         {
@@ -66,6 +79,8 @@ static partial class WebSocketChannel
                         ;
                 }
             }
+
+            completionCancellation.Cancel();
         }
 
         async ValueTask Close(string? description = default)
@@ -76,14 +91,25 @@ static partial class WebSocketChannel
                 webSocket.CloseOutputAsync(description != null ? WebSocketCloseStatus.InternalServerError : WebSocketCloseStatus.NormalClosure, description, default);
 
             // Don't wait indefinitely for the close to be acknowledged
-            await Task.WhenAny(closeTask, Task.Delay(closeTimeout));
+            await Task.WhenAny(closeTask, Task.Delay(closeTimeout)).ConfigureAwait(false);
         }
 
         class WebSocketChannelReader : ChannelReader<ReadOnlyMemory<byte>>
         {
+#if DEBUG
+            static readonly TimeSpan tryReadTimeout = TimeSpan.FromMilliseconds(
+                Debugger.IsAttached ? int.MaxValue : 250);
+#else
             static readonly TimeSpan tryReadTimeout = TimeSpan.FromMilliseconds(250);
+#endif
+
             readonly DefaultWebSocketChannel channel;
-            readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+            readonly object syncObj = new();
+
+            readonly SemaphoreSlim semaphore = new(1, 1);
+
+            IMemoryOwner<byte>? memoryOwner;
+            ValueTask<ReadOnlyMemory<byte>>? readingTask = default;
 
             public WebSocketChannelReader(DefaultWebSocketChannel channel) => this.channel = channel;
 
@@ -113,15 +139,53 @@ static partial class WebSocketChannel
                 if (channel.webSocket.State != WebSocketState.Open)
                     return false;
 
+                // We keep a singleton ongoing reading task at a time (single reader), 
+                // since that's how the underlying websocket has to be used (no concurrent
+                // Receive calls should be performed).
+                if (readingTask == null)
+                {
+                    lock (syncObj)
+                    {
+                        if (readingTask == null)
+                            readingTask = ReadCoreAsync(channel.completionCancellation.Token);
+                    }
+                }
+
+                // Don't lock the call for more than a small timeout time. This allows 
+                // this method, which is not async and cannot be cancelled to signal that 
+                // it couldn't read within an acceptable timeout. This is important considering 
+                // the ReadAllAsync extension method on ChannelReader<T>, which is implemented 
+                // as follows:
+                //while (await WaitToReadAsync())
+                //    while (TryRead(out T? item))
+                //        yield return item;
+                // NOTE: our WaitToReadAsync will continue to return true as long as the 
+                // websocket is open, so the underlying reading task can complete.
                 var cts = new CancellationTokenSource(tryReadTimeout);
-                var result = ReadCoreAsync(cts.Token);
-                while (!result.IsCompleted)
+                while (readingTask != null && readingTask?.IsCompleted != true && !cts.IsCancellationRequested)
                     ;
 
-                if (result.IsCompletedSuccessfully)
-                    item = result.Result;
+                if (readingTask == null)
+                    return false;
 
-                return result.IsCompletedSuccessfully && channel.webSocket.State == WebSocketState.Open;
+                lock (syncObj)
+                {
+                    if (readingTask == null)
+                        return false;
+
+                    if (readingTask.Value.IsCompletedSuccessfully == true &&
+                        readingTask.Value.Result.IsEmpty == false)
+                    {
+                        item = readingTask.Value.Result;
+                        readingTask = null;
+                        return true;
+                    }
+
+                    if (readingTask.Value.IsCompleted == true)
+                        readingTask = null;
+
+                    return false;
+                }
             }
 
             public override ValueTask<bool> WaitToReadAsync(CancellationToken cancellationToken = default)
@@ -141,18 +205,19 @@ static partial class WebSocketChannel
 
             async ValueTask<ReadOnlyMemory<byte>> ReadCoreAsync(CancellationToken cancellation)
             {
-                await semaphore.WaitAsync(cancellation);
+                await semaphore.WaitAsync(cancellation).ConfigureAwait(false);
                 try
                 {
-                    using var owner = MemoryPool<byte>.Shared.Rent(512);
-                    var received = await channel.webSocket.ReceiveAsync(owner.Memory, cancellation).ConfigureAwait(false);
+                    memoryOwner?.Dispose();
+                    memoryOwner = MemoryPool<byte>.Shared.Rent(512);
+                    var received = await channel.webSocket.ReceiveAsync(memoryOwner.Memory, cancellation).ConfigureAwait(false);
                     var count = received.Count;
                     while (!cancellation.IsCancellationRequested && !received.EndOfMessage && received.MessageType != WebSocketMessageType.Close)
                     {
                         if (received.Count == 0)
                             break;
 
-                        received = await channel.webSocket.ReceiveAsync(owner.Memory, cancellation).ConfigureAwait(false);
+                        received = await channel.webSocket.ReceiveAsync(memoryOwner.Memory.Slice(count), cancellation).ConfigureAwait(false);
                         count += received.Count;
                     }
 
@@ -160,25 +225,12 @@ static partial class WebSocketChannel
 
                     // We didn't get a complete message, we can't flush partial message.
                     if (received.MessageType == WebSocketMessageType.Close)
-                    {
-                        // Server requested closure.
-                        lock (channel.syncObj)
-                        {
-                            if (channel.done == null)
-                            {
-                                channel.done = socketClosed;
-                                channel.Complete();
-                            }
-                        }
                         throw socketClosed;
-                    }
 
-                    // Only return from the whole buffer, the slice of bytes that we actually received.
-                    return owner.Memory.Slice(0, count);
+                    return memoryOwner.Memory.Slice(0, count);
                 }
                 // Don't re-throw the expected socketClosed exception we throw when Close received.
-                catch (Exception ex) when (ex != socketClosed &&
-                                           (ex is WebSocketException || ex is InvalidOperationException))
+                catch (Exception ex) when (ex is WebSocketException || ex is InvalidOperationException)
                 {
                     // We consider premature closure just as an explicit closure.
                     if (ex is WebSocketException wex && wex.WebSocketErrorCode == WebSocketError.ConnectionClosedPrematurely)
@@ -203,7 +255,7 @@ static partial class WebSocketChannel
         class WebSocketChannelWriter : ChannelWriter<ReadOnlyMemory<byte>>
         {
             readonly DefaultWebSocketChannel channel;
-            readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+            readonly SemaphoreSlim semaphore = new(1, 1);
 
             public WebSocketChannelWriter(DefaultWebSocketChannel channel) => this.channel = channel;
 
@@ -258,10 +310,10 @@ static partial class WebSocketChannel
 
             async ValueTask WriteAsyncCore(ReadOnlyMemory<byte> item, CancellationToken cancellationToken = default)
             {
-                await semaphore.WaitAsync(cancellationToken);
+                await semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
                 try
                 {
-                    await channel.webSocket.SendAsync(item, WebSocketMessageType.Binary, true, cancellationToken);
+                    await channel.webSocket.SendAsync(item, WebSocketMessageType.Binary, true, cancellationToken).ConfigureAwait(false);
                 }
                 finally
                 {
