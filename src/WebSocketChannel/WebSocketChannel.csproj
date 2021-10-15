@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Devlooped.Net</RootNamespace>
-    <ImplicitUsings>true</ImplicitUsings>
+    <ImplicitUsings>disable</ImplicitUsings>
     <PackageId>WebSocketChannel</PackageId>
     <Description>High-performance System.Threading.Channels API adapter for System.Net.WebSockets</Description>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -14,10 +14,4 @@
     <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Using Include="System.Buffers" />
-    <Using Include="System.Net.WebSockets" />
-    <Using Include="System.Threading.Channels" />
-  </ItemGroup>
-  
 </Project>
