@@ -1,6 +1,5 @@
 [file]
 	url = https://github.com/devlooped/oss
-	url = https://github.com/devlooped/.github
 [file ".netconfig"]
 	url = https://github.com/devlooped/oss/blob/main/.netconfig
 	skip
@@ -31,11 +30,6 @@
 	url = https://github.com/devlooped/oss/blob/main/.gitattributes
 	sha = 0683ee777d7d878d4bf013d7deea352685135a05
 	etag = 7acb32f5fa6d4ccd9c824605a7c2b8538497f0068c165567807d393dcf4d6bb7
-	weak
-[file ".github/FUNDING.yml"]
-	url = https://github.com/devlooped/.github/blob/main/.github/FUNDING.yml
-	sha = 39f4c591716ff50dd035d2fade35e5822489ab7f
-	etag = a944c728facd033bbdfb4ff8d0ef10d0b3a457c277dc499458df0ffc7e6409da
 	weak
 [file ".github/dependabot.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/dependabot.yml
@@ -136,24 +130,4 @@
 	url = https://github.com/devlooped/oss/blob/main/src/nuget.config
 	sha = b2fa09bd9db6de89e37a8ba6705b5659e435dafd
 	etag = eb2d09e546aa1e11c0b464d9ed6ab2d3c028a1d86c3ac40a318053625fb72819
-	weak
-[file ".github/CODE_OF_CONDUCT.md"]
-	url = https://github.com/devlooped/.github/blob/main/.github/CODE_OF_CONDUCT.md
-	sha = c97cdeb04769df3f397d9e70b345d4549628c388
-	etag = 4857c01bb695f09bf6912d778951c3065d9dd565e5de3d0827f40432d0e4c613
-	weak
-[file ".github/CONTRIBUTING.md"]
-	url = https://github.com/devlooped/.github/blob/main/.github/CONTRIBUTING.md
-	sha = 1dc5908c7711c17c1fe06abd191f2c09f37ac56a
-	etag = b2bc4ee0e910ea60c3daa4e7d391e6260b5644d3e3c2a19145525c8db3f454fd
-	weak
-[file ".github/SECURITY.md"]
-	url = https://github.com/devlooped/.github/blob/main/.github/SECURITY.md
-	sha = c97cdeb04769df3f397d9e70b345d4549628c388
-	etag = fc8101fd914820db3e6b42d608dc46aefbc60c830ac721ed3917daead3727dbd
-	weak
-[file ".github/SUPPORT.md"]
-	url = https://github.com/devlooped/.github/blob/main/.github/SUPPORT.md
-	sha = c97cdeb04769df3f397d9e70b345d4549628c388
-	etag = 2d47e2fc4fdfa3515203d452674566e3df507461f9938f451a06d79deb687d24
 	weak
