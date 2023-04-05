@@ -1,10 +1,12 @@
 bin
+app
 obj
 artifacts
 pack
 TestResults
 .vs
 .vscode
+.idea
 
 *.suo
 *.sdf
@@ -13,9 +15,12 @@ TestResults
 *.nupkg
 *.metaproj
 *.tmp
+*.log
 *.cache
 *.binlog
 *.zip
+__azurite*.*
+__*__
 
 .nuget
 *.lock.json
