@@ -38,8 +38,8 @@
 	weak
 [file ".github/workflows/build.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
-	sha = 543f7daf1e8a63ea0dc599ae0494df7d1a90caa4
-	etag = 6abaf57f2624bc65517b8cc7b8a4b7e34542cf26f2ebcd1935a15a2a075c8733
+	sha = 13d67e2cf3f786c8189364fd29332aaa7dc575dc
+	etag = c616df0877fba60002ccfc0397e9f731ddb22acbbb195a0598fedd4cac5f3135
 	weak
 [file ".github/workflows/changelog.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.yml
