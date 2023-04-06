@@ -8,6 +8,7 @@ High-performance [System.Threading.Channels](https://devblogs.microsoft.com/dotn
 [![License](https://img.shields.io/github/license/devlooped/WebSocketChannel.svg?color=blue)](https://github.com/devlooped/WebSocketChannel/blob/main/license.txt)
 [![Build](https://github.com/devlooped/WebSocketChannel/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/WebSocketChannel/actions)
 
+<!-- #content -->
 # Usage
 
 ```csharp
@@ -76,6 +77,7 @@ app.Use(async (context, next) =>
 });
 ```
 
+<!-- #content -->
 # Installation
 
 This project can be used either as a regular nuget package:
