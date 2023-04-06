@@ -249,7 +249,14 @@ static partial class WebSocketChannel
                         if (received.Count == 0)
                             break;
 
-                        received = await channel.webSocket.ReceiveAsync(memoryOwner.Memory.Slice(count), cancellation).ConfigureAwait(false);
+                        if (!received.EndOfMessage && count >= memoryOwner.Memory.Length)
+                        {
+                            var tempMem = memoryOwner.Memory.Slice(0, count);
+                            memoryOwner = MemoryPool<byte>.Shared.Rent(count + 512);
+                            tempMem.CopyTo(memoryOwner.Memory);
+                        }
+
+                        received = await channel.webSocket.ReceiveAsync(memoryOwner.Memory.Slice(count, memoryOwner.Memory.Length - count), cancellation).ConfigureAwait(false);
                         count += received.Count;
                     }
 

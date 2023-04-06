@@ -38,6 +38,24 @@ public record WebSocketChannelTests(ITestOutputHelper Output)
     }
 
     [Fact]
+    public async Task EchoChannelWorksWithLongerText()
+    {
+        using var server = WebSocketServer.Create(EchoChannel);
+        using var client = new ClientWebSocket();
+        await client.ConnectAsync(server.Uri, CancellationToken.None);
+
+        var channel = WebSocketChannel.Create(client);
+
+        var longtext = new string('a', 1000000);
+        await channel.Writer.WriteAsync(Encoding.UTF8.GetBytes(longtext).AsMemory());
+
+        var value = await channel.Reader.ReadAsync();
+
+        Assert.Equal(longtext, Encoding.UTF8.GetString(value.Span));
+        server.Dispose();
+    }
+
+    [Fact]
     public async Task EchoWorksWithTryWrite()
     {
         using var server = WebSocketServer.Create();
