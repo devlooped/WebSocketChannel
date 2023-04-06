@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.1](https://github.com/devlooped/WebSocketChannel/tree/v1.0.1) (2023-04-06)
+
+[Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/v1.0.0...v1.0.1)
+
 ## [v1.0.0](https://github.com/devlooped/WebSocketChannel/tree/v1.0.0) (2023-04-06)
 
 [Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/v0.9.2...v1.0.0)
