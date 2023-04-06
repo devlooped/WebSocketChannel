@@ -4,14 +4,25 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>WebSocketChannel.CodeAnalysis</AssemblyName>
     <PackFolder>analyzers/dotnet/roslyn4.0</PackFolder>
-    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Label="SponsorLink">
+    <CustomAfterMicrosoftCSharpTargets>$(MSBuildThisFileDirectory)..\SponsorLink\SponsorLink.Analyzer.targets</CustomAfterMicrosoftCSharpTargets>
+    <FundingPackageId>WebSocketChannel</FundingPackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGetizer" Version="1.0.1" PrivateAssets="all" PackTransitive="false" />
-    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.2.12" PrivateAssets="all" />
+    <PackageReference Include="NuGetizer" Version="1.2.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" Pack="false" />
-    <PackageReference Include="Devlooped.SponsorLink" Version="0.10.3" PrivateAssets="all" />
+    <PackageReference Include="PolySharp" Version="1.14.1" PrivateAssets="All" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="WebSocketChannel.targets" PackFolder="buildTransitive" />
+  </ItemGroup>
+
+  <Target Name="VerifySponsorLink" AfterTargets="Build">
+    <Error Condition="'$(SponsorLinkImported)' != 'true'" Text="SponsorLink was not imported." />
+  </Target>
 
 </Project>
