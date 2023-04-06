@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />-->
+    <ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
   </ItemGroup>
 
 </Project>
