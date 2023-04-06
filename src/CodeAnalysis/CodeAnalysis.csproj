@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>WebSocketChannel.CodeAnalysis</AssemblyName>
     <PackFolder>analyzers/dotnet/roslyn4.0</PackFolder>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
