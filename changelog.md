@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.1.0](https://github.com/devlooped/WebSocketChannel/tree/v1.1.0) (2023-08-11)
+
+[Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/v1.0.1...v1.1.0)
+
+:twisted_rightwards_arrows: Merged:
+
+- Remove current implementation of SponsorLink for now [\#47](https://github.com/devlooped/WebSocketChannel/pull/47) (@kzu)
+
 ## [v1.0.1](https://github.com/devlooped/WebSocketChannel/tree/v1.0.1) (2023-04-06)
 
 [Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/v1.0.0...v1.0.1)
