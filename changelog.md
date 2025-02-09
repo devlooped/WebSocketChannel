@@ -1,5 +1,21 @@
 # Changelog
 
+## [v1.2.0](https://github.com/devlooped/WebSocketChannel/tree/v1.2.0) (2025-02-09)
+
+[Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/v1.1.0...v1.2.0)
+
+:sparkles: Implemented enhancements:
+
+- 💟 Add SponsorLink to ensure ongoing maintenance [\#52](https://github.com/devlooped/WebSocketChannel/pull/52) (@kzu)
+
+:bug: Fixed bugs:
+
+- Fix the ID of the funding product and set 30 days grace perior [\#59](https://github.com/devlooped/WebSocketChannel/pull/59) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- Make tests more reliable by checking for a free port [\#60](https://github.com/devlooped/WebSocketChannel/pull/60) (@kzu)
+
 ## [v1.1.0](https://github.com/devlooped/WebSocketChannel/tree/v1.1.0) (2023-08-11)
 
 [Full Changelog](https://github.com/devlooped/WebSocketChannel/compare/v1.0.1...v1.1.0)
