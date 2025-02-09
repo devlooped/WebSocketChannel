@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,22 @@ public record WebSocketServer(Uri Uri, Task Completion, CancellationTokenSource 
         });
 
         var port = Interlocked.Increment(ref serverPort);
+        // test port availability by attempting to bind a listener to it, and increment 
+        // until we get a free one
+        while (true)
+        {
+            try
+            {
+                using var listener = new TcpListener(IPAddress.Loopback, port);
+                listener.Start();
+                listener.Stop();
+                break;
+            }
+            catch
+            {
+                port = Interlocked.Increment(ref serverPort);
+            }
+        }
 
         // Only turn on output loggig when running tests in the IDE, for easier troubleshooting.
         if (output != null && !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VSAPPIDNAME")))
