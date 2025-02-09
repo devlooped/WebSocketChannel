@@ -6,7 +6,7 @@ High-performance [System.Threading.Channels](https://devblogs.microsoft.com/dotn
 [![Version](https://img.shields.io/nuget/v/WebSocketChannel.svg?color=royalblue)](https://www.nuget.org/packages/WebSocketChannel)
 [![Downloads](https://img.shields.io/nuget/dt/WebSocketChannel.svg?color=green)](https://www.nuget.org/packages/WebSocketChannel)
 [![License](https://img.shields.io/github/license/devlooped/WebSocketChannel.svg?color=blue)](https://github.com/devlooped/WebSocketChannel/blob/main/license.txt)
-[![Build](https://github.com/devlooped/WebSocketChannel/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/WebSocketChannel/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/devlooped/WebSocketChannel/build.yml?branch=main)](https://github.com/devlooped/WebSocketChannel/actions)
 
 <!-- #content -->
 # Usage
