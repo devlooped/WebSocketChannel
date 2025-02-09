@@ -8,7 +8,7 @@
 
   <PropertyGroup Label="SponsorLink">
     <CustomAfterMicrosoftCSharpTargets>$(MSBuildThisFileDirectory)..\SponsorLink\SponsorLink.Analyzer.targets</CustomAfterMicrosoftCSharpTargets>
-    <FundingPackageId>WebSocketChannel</FundingPackageId>
+    <FundingGrace>30</FundingGrace>
   </PropertyGroup>
 
   <ItemGroup>
