@@ -424,6 +424,6 @@
 	weak
 [file ".github/actions/dotnet/action.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/actions/dotnet/action.yml
-	sha = 08c70776943839f73dbea2e65355108747468508
-	etag = a5f1fa7f652cc2c2e13b7c236e5f8403aea26667d6a040c84ef976af267af6ab
+	sha = 7e9acf45714821735ccc5bb3f0f844f505d5ae8a
+	etag = 0dda1755bb185e92aecd1bf8665214f12e3562315257f642ca4ad85c24771ac1
 	weak
