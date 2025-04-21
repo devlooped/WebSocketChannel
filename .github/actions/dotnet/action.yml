@@ -27,13 +27,6 @@ runs:
           echo 'EOF'
         } >> $GITHUB_OUTPUT
 
-    - name: ⚙ versions
-      if: steps.dotnet.outputs.versions != ''
-      shell: bash
-      run: |
-        echo "Versions:"
-        echo "${{ steps.dotnet.outputs.versions }}"
-
     - name: ⚙ dotnet
       if: steps.dotnet.outputs.versions != ''
       uses: actions/setup-dotnet@v4
