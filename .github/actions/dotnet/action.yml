@@ -9,11 +9,12 @@ runs:
       shell: bash
       run: |
         VERSIONS=$(gh api /repos/${{ github.repository }}/properties/values | jq -r '.[] | select(.property_name == "DOTNET") | .value')
-        echo "versions=$VERSIONS" >> $GITHUB_OUTPUT        
+        VERSIONS=$(echo "$VERSIONS" | tr ',' '\n')
+        echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
 
     - name: ⚙ dotnet
       if: steps.dotnet.outputs.versions != ''
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          ${{ join(fromJson(steps.dotnet.outputs.versions), '\n') }}
+          ${{ steps.dotnet.outputs.versions }}
