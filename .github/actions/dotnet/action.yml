@@ -15,4 +15,5 @@ runs:
       if: steps.dotnet.outputs.versions != ''
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ steps.dotnet.outputs.versions }}
+        dotnet-version: |
+            ${{ join(fromJson(steps.dotnet.outputs.versions), '\n') }}
