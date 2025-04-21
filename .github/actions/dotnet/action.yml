@@ -9,12 +9,32 @@ runs:
       shell: bash
       run: |
         VERSIONS=$(gh api /repos/${{ github.repository }}/properties/values | jq -r '.[] | select(.property_name == "DOTNET") | .value')
-        VERSIONS=$(echo "$VERSIONS" | tr ',' '\n')
-        echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
+        # Convert comma-separated to newline-separated
+        NEWLINE_VERSIONS=$(echo "$VERSIONS" | tr ',' '\n')
+        # Validate versions
+        while IFS= read -r version; do
+          if ! [[ $version =~ ^[0-9]+(\.[0-9]+(\.[0-9]+)?)?(\.x)?$ ]]; then
+            echo "Error: Invalid version format: $version"
+            exit 1
+          fi
+        done <<< "$NEWLINE_VERSIONS"
+        # Write multiline output to $GITHUB_OUTPUT
+        {
+          echo 'versions<<EOF'
+          echo "$NEWLINE_VERSIONS"
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT
+
+    - name: ⚙ versions
+      if: steps.dotnet.outputs.versions != ''
+      shell: bash
+      run: |
+        echo "Versions:"
+        echo "${{ steps.dotnet.outputs.versions }}"
 
     - name: ⚙ dotnet
       if: steps.dotnet.outputs.versions != ''
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          ${{ join(split(steps.dotnet.outputs.versions, ','), '\n') }}
+          ${{ steps.dotnet.outputs.versions }}
