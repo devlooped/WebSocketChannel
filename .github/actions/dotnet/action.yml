@@ -17,4 +17,4 @@ runs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          ${{ steps.dotnet.outputs.versions }}
+          ${{ join(split(steps.dotnet.outputs.versions, ','), '\n') }}
