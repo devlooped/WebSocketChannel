@@ -109,12 +109,12 @@ for the `dotnet-file` configuration settings that tracks all this.
 
 # Dogfooding
 
-[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/WebSocketChannel/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
+[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.app/vpre/WebSocketChannel/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.app/index.json)
 [![Build](https://github.com/devlooped/WebSocketChannel/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/WebSocketChannel/actions)
 
 We also produce CI packages from branches and pull requests so you can dogfood builds as quickly as they are produced. 
 
-The CI feed is `https://pkg.kzu.io/index.json`. 
+The CI feed is `https://pkg.kzu.app/index.json`. 
 
 The versioning scheme for packages is:
 
